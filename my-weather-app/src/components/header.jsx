@@ -9,8 +9,8 @@ function Header() {
       <AppBar position="static" className={styles.appbarContainer}>
         <React.Fragment>
           <CssBaseline />
-          <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Toolbar disableGutters sx={{ minHeight: "unset" }}>
+            <Typography variant="h5" component="div">
               Stormry
             </Typography>
           </Toolbar>

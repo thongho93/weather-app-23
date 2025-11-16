@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { BACKEND_URL } from "../../api/constant.mjs";
+import SearchBar from "../../components/SearchBar";
+
 
 function HomePage() {
   const [weatherData, setWeatherData] = useState(null);
@@ -47,6 +49,27 @@ function HomePage() {
     fetchByLocation();
   }, []);
 
+  async function handleSelectLocation(location) {
+    try {
+      setLoading(true);
+      setError("");
+      setWeatherData(null);
+
+      const response = await fetch(`${BACKEND_URL}?lat=${location.lat}&lon=${location.lon}`);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch weather for selected location");
+      }
+
+      const data = await response.json();
+      setWeatherData(data);
+    } catch (err) {
+      setError(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   async function handleSearch(e) {
     e.preventDefault();
     if (!city) return;
@@ -72,23 +95,18 @@ function HomePage() {
 
   return (
     <div>
-      <form onSubmit={handleSearch}>
-        <button type="button" onClick={fetchByLocation}>
-          My position
-        </button>
-        <input
-          type="text"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          placeholder="Enter city name"
-        />
-        <button type="submit">Search</button>
-      </form>
+      <SearchBar
+        city={city}
+        setCity={setCity}
+        onSearch={handleSearch}
+        onLocation={fetchByLocation}
+        onSelectLocation={handleSelectLocation}
+      /> 
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
       {weatherData && (
         <div>
-          <h2>Weather in {weatherData.location.name}</h2>
+          <h2>{weatherData.location.name}</h2>
           <p>Temperature: {weatherData.current.temp_c}°C</p>
           <p>Condition: {weatherData.current.condition.text}</p>
           <img src={weatherData.current.condition.icon} alt={weatherData.current.condition.text} />
