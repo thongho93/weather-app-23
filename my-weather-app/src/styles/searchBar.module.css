@@ -1,0 +1,76 @@
+.searchbarWrapper {
+  position: relative;
+  margin: 2rem 0;
+}
+
+.searchbarInner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.searchInputWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.searchInput {
+  flex: 1;
+  padding: 0.5rem;
+  padding-left: 2rem;
+  font-size: 1rem;
+  background-color: #2a1d49ff;
+  color: #fafafa;
+  border-radius: 15px;
+  border: none;
+  outline: none;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: #fafafa;
+  pointer-events: none;
+}
+
+.suggestionsList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  background: #2a1d49ff;
+  color: #fafafa;
+  border-radius: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.suggestionItem {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+.suggestionItem:hover {
+  background: #2a1d49ff;
+  color: #fafafa;
+}
+
+.suggestionSub {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.searchInput::placeholder {
+  color: #fafafa;
+  opacity: 1;
+}
