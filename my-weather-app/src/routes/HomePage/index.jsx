@@ -1,119 +1,136 @@
-import { useState, useEffect } from "react";
-import { BACKEND_URL } from "../../api/constant.mjs";
-import SearchBar from "../../components/SearchBar";
+import { useState } from "react";
+import styles from "../../styles/searchBar.module.css";
+import SearchIcon from "@mui/icons-material/Search";
 
+export default function SearchBar({ city, setCity, onSearch, onLocation, onSelectLocation }) {
+  const [suggestions, setSuggestions] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
-function HomePage() {
-  const [weatherData, setWeatherData] = useState(null);
-  const [city, setCity] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  async function fetchByLocation() {
-    if (!navigator.geolocation) {
-      setError("Geolocation is not supported by your browser.");
-      return;
+  function handleChange(e) {
+    setCity(e.target.value);
+    if (e.target.value.length > 2) {
+      fetchSuggestions(e.target.value);
+    } else {
+      setSuggestions([]);
+      setOpen(false);
     }
+  }
 
-    setLoading(true);
-    setError("");
-    setWeatherData(null);
+  async function fetchSuggestions(query) {
+    try {
+      const response = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&apiKey=YOUR_API_KEY`);
+      const data = await response.json();
+      setSuggestions(data.features.map((feature) => ({
+        id: feature.properties.place_id,
+        name: feature.properties.name,
+        region: feature.properties.state,
+        country: feature.properties.country,
+        lat: feature.properties.lat,
+        lon: feature.properties.lon,
+      })));
+      setOpen(true);
+    } catch (error) {
+      setSuggestions([]);
+      setOpen(false);
+    }
+  }
 
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
+  function handleSelect(loc) {
+    setCity(loc.name);
+    setSuggestions([]);
+    setOpen(false);
+    onSelectLocation(loc);
+    setExpanded(false);
+  }
 
-        try {
-          const response = await fetch(`${BACKEND_URL}?lat=${lat}&lon=${lon}`);
-          if (!response.ok) {
-            throw new Error("Could not fetch weather by location");
-          }
+  if (expanded) {
+    return (
+      <div className={styles.searchbarWrapper}>
+        <form onSubmit={(e) => e.preventDefault()} className={styles.searchbarExpanded}>
+          <div className={styles.searchInputWrapper}>
+            <SearchIcon className={styles.searchIcon} />
+            <input
+              type="text"
+              value={city}
+              onChange={handleChange}
+              placeholder="Søk etter et sted"
+              className={styles.searchInput}
+              autoFocus
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setExpanded(false);
+              setSuggestions([]);
+            }}
+            className={styles.closeButton}
+          >
+            Lukk ✕
+          </button>
+        </form>
 
-          const data = await response.json();
-          setWeatherData(data);
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
-        }
-      },
-      (err) => {
-        setError("Permission denied or unable to get location.");
-        setLoading(false);
-      }
+        <div className={styles.positionBelow}>
+          <button type="button" onClick={onLocation}>
+            My position
+          </button>
+        </div>
+
+        {open && suggestions.length > 0 && (
+          <ul className={styles.suggestionsList}>
+            {suggestions.map((loc) => (
+              <li
+                key={`${loc.id}-${loc.lat}-${loc.lon}`}
+                onClick={() => handleSelect(loc)}
+                className={styles.suggestionItem}
+              >
+                <div>{loc.name}</div>
+                <div className={styles.suggestionSub}>
+                  {loc.region}, {loc.country}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     );
   }
 
-  useEffect(() => {
-    fetchByLocation();
-  }, []);
-
-  async function handleSelectLocation(location) {
-    try {
-      setLoading(true);
-      setError("");
-      setWeatherData(null);
-
-      const response = await fetch(`${BACKEND_URL}?lat=${location.lat}&lon=${location.lon}`);
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch weather for selected location");
-      }
-
-      const data = await response.json();
-      setWeatherData(data);
-    } catch (err) {
-      setError(err.message || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function handleSearch(e) {
-    e.preventDefault();
-    if (!city) return;
-
-    setLoading(true);
-    setError("");
-    setWeatherData(null);
-
-    try {
-      const response = await fetch(`${BACKEND_URL}?city=${encodeURIComponent(city)}`);
-      if (!response.ok) {
-        throw new Error("Could not fetch weather for the specified city");
-      }
-
-      const data = await response.json();
-      setWeatherData(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   return (
-    <div>
-      <SearchBar
-        city={city}
-        setCity={setCity}
-        onSearch={handleSearch}
-        onLocation={fetchByLocation}
-        onSelectLocation={handleSelectLocation}
-      /> 
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
-      {weatherData && (
-        <div>
-          <h2>{weatherData.location.name}</h2>
-          <p>Temperature: {weatherData.current.temp_c}°C</p>
-          <p>Condition: {weatherData.current.condition.text}</p>
-          <img src={weatherData.current.condition.icon} alt={weatherData.current.condition.text} />
+    <div className={styles.searchbarWrapper}>
+      <form onSubmit={(e) => e.preventDefault()} className={styles.searchbarInner}>
+        <button type="button" onClick={onLocation}>
+          My position
+        </button>
+        <div className={styles.searchInputWrapper}>
+          <SearchIcon className={styles.searchIcon} />
+          <input
+            type="text"
+            value={city}
+            onChange={handleChange}
+            onFocus={() => setExpanded(true)}
+            placeholder="Søk etter et sted"
+            className={styles.searchInput}
+          />
         </div>
+      </form>
+      {open && suggestions.length > 0 && (
+        <ul className={styles.suggestionsList}>
+          {suggestions.map((loc) => (
+            <li
+              key={`${loc.id}-${loc.lat}-${loc.lon}`}
+              onClick={() => handleSelect(loc)}
+              className={styles.suggestionItem}
+            >
+              <div>{loc.name}</div>
+              <div className={styles.suggestionSub}>
+                {loc.region}, {loc.country}
+              </div>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
 }
-
-export default HomePage;

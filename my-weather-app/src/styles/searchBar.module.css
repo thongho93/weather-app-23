@@ -1,26 +1,27 @@
 .searchbarWrapper {
   position: relative;
   margin: 2rem 0;
+  width: 100%;
 }
 
 .searchbarInner {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  width: 100%;
+  gap: 1rem;
+  width: auto;
 }
 
 .searchInputWrapper {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
   position: relative;
+  flex: 1;
 }
 
 .searchInput {
   flex: 1;
   padding: 0.5rem;
-  padding-left: 2rem;
+  padding-left: 2.5rem;
   font-size: 1rem;
   background-color: #2a1d49ff;
   color: #fafafa;
@@ -73,4 +74,44 @@
 .searchInput::placeholder {
   color: #fafafa;
   opacity: 1;
+}
+
+.searchbarExpanded {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border-radius: 999px;
+  border: 1px solid #c4b5fd;
+  padding: 0.25rem 0.75rem;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #fafafa;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-left: 0.75rem;
+  white-space: nowrap;
+}
+
+.positionBelow {
+  margin-top: 0.75rem;
+}
+
+.searchbarInner button {
+  margin-right: 1rem;
+}
+
+/* Collapsed (normal) width */
+.searchbarInner .searchInputWrapper {
+  max-width: 420px; /* juster som du ønsker */
+}
+
+/* Expanded mode goes full width */
+.searchbarExpanded .searchInputWrapper {
+  max-width: 100%;
 }
