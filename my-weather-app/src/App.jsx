@@ -5,10 +5,12 @@ import HomePage from "./routes/HomePage";
 
 function Layout() {
   return (
-    <div>
+    <>
       <Header />
-      <Outlet />
-    </div>
+      <main className="pageContainer">
+        <Outlet />
+      </main>
+    </>
   );
 }
 

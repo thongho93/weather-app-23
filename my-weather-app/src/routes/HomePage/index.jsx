@@ -1,135 +1,108 @@
-import { useState } from "react";
-import styles from "../../styles/searchBar.module.css";
-import SearchIcon from "@mui/icons-material/Search";
+import { useState, useEffect } from "react";
+import SearchBar from "../../components/SearchBar";
+import styles from "../../styles/homePage.module.css";
 
-export default function SearchBar({ city, setCity, onSearch, onLocation, onSelectLocation }) {
-  const [suggestions, setSuggestions] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+export default function HomePage() {
+  const [city, setCity] = useState("");
+  const [weather, setWeather] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleChange(e) {
-    setCity(e.target.value);
-    if (e.target.value.length > 2) {
-      fetchSuggestions(e.target.value);
-    } else {
-      setSuggestions([]);
-      setOpen(false);
-    }
-  }
-
-  async function fetchSuggestions(query) {
+  async function fetchWeatherByCoords(lat, lon) {
     try {
-      const response = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&apiKey=YOUR_API_KEY`);
-      const data = await response.json();
-      setSuggestions(data.features.map((feature) => ({
-        id: feature.properties.place_id,
-        name: feature.properties.name,
-        region: feature.properties.state,
-        country: feature.properties.country,
-        lat: feature.properties.lat,
-        lon: feature.properties.lon,
-      })));
-      setOpen(true);
-    } catch (error) {
-      setSuggestions([]);
-      setOpen(false);
+      setLoading(true);
+      setError("");
+
+      const res = await fetch(`http://localhost:4000/api/weather?lat=${lat}&lon=${lon}`);
+      if (!res.ok) throw new Error("Counld not fetch weather data");
+
+      const data = await res.json();
+      setWeather(data);
+      if (data?.location?.name) {
+        setCity(data.location.name);
+      }
+    } catch (err) {
+      console.error("Weather error:", err);
+      setError(err.message || "Something went wrong while fetching weather data");
+      setWeather(null);
+    } finally {
+      setLoading(false);
     }
   }
 
-  function handleSelect(loc) {
-    setCity(loc.name);
-    setSuggestions([]);
-    setOpen(false);
-    onSelectLocation(loc);
-    setExpanded(false);
-  }
+  async function handleLocation() {
+    if (!navigator.geolocation) {
+      setError("Browser does not support geolocation.");
+      return;
+    }
 
-  if (expanded) {
-    return (
-      <div className={styles.searchbarWrapper}>
-        <form onSubmit={(e) => e.preventDefault()} className={styles.searchbarExpanded}>
-          <div className={styles.searchInputWrapper}>
-            <SearchIcon className={styles.searchIcon} />
-            <input
-              type="text"
-              value={city}
-              onChange={handleChange}
-              placeholder="Søk etter et sted"
-              className={styles.searchInput}
-              autoFocus
-            />
-          </div>
-          <button
-            type="button"
-            onClick={() => {
-              setExpanded(false);
-              setSuggestions([]);
-            }}
-            className={styles.closeButton}
-          >
-            Lukk ✕
-          </button>
-        </form>
-
-        <div className={styles.positionBelow}>
-          <button type="button" onClick={onLocation}>
-            My position
-          </button>
-        </div>
-
-        {open && suggestions.length > 0 && (
-          <ul className={styles.suggestionsList}>
-            {suggestions.map((loc) => (
-              <li
-                key={`${loc.id}-${loc.lat}-${loc.lon}`}
-                onClick={() => handleSelect(loc)}
-                className={styles.suggestionItem}
-              >
-                <div>{loc.name}</div>
-                <div className={styles.suggestionSub}>
-                  {loc.region}, {loc.country}
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        fetchWeatherByCoords(latitude, longitude);
+      },
+      (err) => {
+        setError("Could not fetch location.");
+        console.error("Geolocation error", err);
+      }
     );
   }
 
+  // Kalles når bruker velger et forslag fra søk
+  function handleSelectLocation(location) {
+    // location kommer fra WeatherAPI sitt search-endepunkt
+    // der pleier du å ha .lat og .lon
+    fetchWeatherByCoords(location.lat, location.lon);
+  }
+
+  // Hent "my position" automatisk når siden lastes
+  useEffect(() => {
+    handleLocation();
+  }, []);
+
+  function formatWeatherDate(localtime) {
+    if (!localtime) return "";
+
+    // localtime is in format "YYYY-MM-DD HH:MM"
+    const datePart = localtime.split(" ")[0];
+    const date = new Date(datePart);
+
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return date.toLocaleDateString("no-NO", options);
+  }
+
   return (
-    <div className={styles.searchbarWrapper}>
-      <form onSubmit={(e) => e.preventDefault()} className={styles.searchbarInner}>
-        <button type="button" onClick={onLocation}>
-          My position
-        </button>
-        <div className={styles.searchInputWrapper}>
-          <SearchIcon className={styles.searchIcon} />
-          <input
-            type="text"
-            value={city}
-            onChange={handleChange}
-            onFocus={() => setExpanded(true)}
-            placeholder="Søk etter et sted"
-            className={styles.searchInput}
-          />
-        </div>
-      </form>
-      {open && suggestions.length > 0 && (
-        <ul className={styles.suggestionsList}>
-          {suggestions.map((loc) => (
-            <li
-              key={`${loc.id}-${loc.lat}-${loc.lon}`}
-              onClick={() => handleSelect(loc)}
-              className={styles.suggestionItem}
-            >
-              <div>{loc.name}</div>
-              <div className={styles.suggestionSub}>
-                {loc.region}, {loc.country}
+    <div>
+      <SearchBar
+        city={city}
+        setCity={setCity}
+        onLocation={handleLocation}
+        onSelectLocation={handleSelectLocation}
+      />
+
+      {loading && <p>Laster vær...</p>}
+      {error && <p>{error}</p>}
+
+      {weather && (
+        <div>
+          <div>
+            <h1>{weather.location.name}</h1>
+            <h3>
+              {weather.location.region}, {weather.location.country}
+            </h3>
+          </div>
+          <div className={styles.todayWeatherWrapper}>
+            <div>
+              <h4>Været nå</h4>
+              <p>{formatWeatherDate(weather.location.localtime)}</p>
+              <img src={weather.current.condition.icon} alt={weather.current.condition.text} />{" "}
+              <div>
+                <p>{weather.current.condition.text}</p>
               </div>
-            </li>
-          ))}
-        </ul>
+            </div>
+            <p>Temperatur: {weather.current.temp_c}°C</p>
+          </div>
+        </div>
       )}
     </div>
   );
