@@ -1,3 +1,26 @@
+/* Location*/
+.locationWrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 1.5rem 0 1rem 0;
+}
+.locationNameWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.starIcon {
+  color: var(--tertiary-color);
+  cursor: pointer;
+}
+
+.locationRegionScript {
+  color: var(--neutral-dark-color);
+  margin: 0;
+  padding: 0;
+}
+
+/* Today Weather */
 .todayWeatherWrapper {
   display: flex;
   flex-direction: column;

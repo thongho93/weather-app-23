@@ -10,7 +10,12 @@ function Header() {
         <React.Fragment>
           <CssBaseline />
           <Toolbar disableGutters sx={{ minHeight: "unset" }}>
-            <Typography variant="h5" component="div">
+            <Typography
+              variant="h5"
+              component="a"
+              href="/"
+              sx={{ textDecoration: "none", color: "inherit", padding: "0.5rem 1rem" }}
+            >
               Stormry
             </Typography>
           </Toolbar>

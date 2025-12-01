@@ -102,7 +102,7 @@ function SearchBar({ city, setCity, onSearch, onLocation, onSelectLocation }) {
   return (
     <div className={styles.searchbarWrapper}>
       <form onSubmit={(e) => e.preventDefault()} className={styles.searchbarInner}>
-        <button type="button" onClick={onLocation}>
+        <button type="button" className={styles.myPositionButton} onClick={onLocation}>
           My position
         </button>
         <div className={styles.searchInputWrapper}>

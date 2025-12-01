@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import SearchBar from "../../components/SearchBar";
 import styles from "../../styles/homePage.module.css";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import StarIcon from "@mui/icons-material/Star";
 
 export default function HomePage() {
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [hoverStar, setHoverStar] = useState(false);
 
   async function fetchWeatherByCoords(lat, lon) {
     try {
@@ -85,16 +88,31 @@ export default function HomePage() {
 
       {weather && (
         <div>
-          <div>
-            <h1>{weather.location.name}</h1>
-            <h3>
-              {weather.location.region}, {weather.location.country}
-            </h3>
+          <div className={styles.locationWrapper}>
+            <div className={styles.locationNameWrapper}>
+              <h1>{weather.location.name}</h1>
+              <div onMouseEnter={() => setHoverStar(true)} onMouseLeave={() => setHoverStar(false)}>
+                {hoverStar ? (
+                  <StarIcon className={styles.starIcon} />
+                ) : (
+                  <StarBorderIcon className={styles.starIcon} />
+                )}
+              </div>
+            </div>
+            <div>
+              <h5 className={styles.locationRegionScript}>
+                {weather.location.region}, {weather.location.country}
+              </h5>
+            </div>
           </div>
           <div className={styles.todayWeatherWrapper}>
             <div>
-              <h4>Været nå</h4>
-              <p>{formatWeatherDate(weather.location.localtime)}</p>
+              <div>
+                <h2>Været nå</h2>
+              </div>
+              <div>
+                <p>{formatWeatherDate(weather.location.localtime)}</p>
+              </div>
               <img src={weather.current.condition.icon} alt={weather.current.condition.text} />{" "}
               <div>
                 <p>{weather.current.condition.text}</p>
