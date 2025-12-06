@@ -5,7 +5,7 @@ Stormry gir deg værinformasjon i et stilrent og lettlest UI inspirert av Yr og 
 
 ## 📸 Skjermbilde
 
-<img src="../weather-app-23/my-weather-app/src/assets/Skjermbilde weather-app.png" width="900" />
+<img src="/my-weather-app/src/assets/logo.png" width="700" />
 
 ## 🚀 Funksjoner
 
