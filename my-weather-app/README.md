@@ -1,70 +1,84 @@
-# Getting Started with Create React App
+🌤️ #Stormry
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+En moderne og intuitiv værapp bygget med React, Express, og WeatherAPI.
+Stormry gir deg værinformasjon i et stilrent og lettlest UI inspirert av Yr og Apple Weather.
 
-## Available Scripts
+⸻
 
-In the project directory, you can run:
+📸 ##Skjermbilde
+<img src="./docs/screenshot-main.png" width="900" />
 
-### `npm start`
+⸻
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+🚀 ##Funksjoner
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Vær akkurat nå
+• Temperatur
+• Føles-som temperatur
+• Ikon for værforhold (dag/natt)
+• Nedbør i mm
+• Vindhastighet
+• Vindretning
 
-### `npm test`
+Resten av dagen
+• Viser tidsbolker
+• Temperatur
+• Nedbør i mm
+• Vindhastighet og retning
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Lokasjon og søk
+• Automatisk henting av brukerens posisjon
+• Søk etter byer og velg fra treffliste
+• Viser region og land
 
-### `npm run build`
+⸻
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+🧱 ##Teknologistack
+Teknologi:
+• Frontend: React, Styled Components
+• Backend: Node.js, Express
+• Værdata: WeatherAPI
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+⸻
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+🔧 ##Installere og kjøre prosjektet
 
-### `npm run eject`
+1. Klon repoet:
+   ````git clone <https://github.com/thongho93/weather-app-23.git>
+   cd my-weather-app```
+   ````
+2. Installer avhengigheter for frontend:
+   `npm install`
+3. Installer avhengigheter for backend:
+   ````cd server
+   npm install```
+   ````
+4. Sett opp miljøvariabler:
+   Opprett en `.env` fil i `server` mappen med følgende innhold:
+   ` WEATHER_API_KEY=din_weatherapi_nøkkel`
+5. Kjør backend serveren:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+````cd server
+ npm start```
+ http://localhost:4000/api/weather
+6. Kjør frontend appen:
+``` cd ..
+ npm start
+ http://localhost:3000```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+⸻
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+📌 ##Videreutvikling
+• Lagre favorittsteder (LocalStorage)
+• 7-dagers langtidsvarsel
+• Time-for-time graf
+• Lys/mørk tema-bryter
+• Bedre animasjoner for værikoner
+• Caching i backend for raskere responser
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+⸻
 
-## Learn More
+📜 ##Lisens
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[MIT] License
+````

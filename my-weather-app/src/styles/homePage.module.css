@@ -1,0 +1,171 @@
+/* Location*/
+.locationWrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 1.5rem 0 1rem 0;
+}
+.locationNameWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.starIcon {
+  color: var(--tertiary-color);
+  cursor: pointer;
+}
+
+.locationRegionScript {
+  color: var(--neutral-dark-color);
+  margin: 0;
+  padding: 0;
+}
+
+/* Today Weather */
+.todayWeatherWrapper {
+  display: flex;
+  border-radius: 0.5rem;
+  padding: 1.5rem 2rem;
+  background: var(--primary-color);
+  align-items: flex-start;
+}
+
+.todayNowWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.todayHeader {
+  display: flex;
+  flex-direction: column;
+}
+
+.todayHeader h2 {
+  margin: 0;
+}
+
+.todayDate {
+  margin: 0.25rem 0 0 0;
+  color: var(--neutral-dark-color);
+}
+
+.todayNowContent {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.todayLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.todayIconTempRow {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+.todayRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+  text-align: right;
+}
+
+.todayWind {
+  margin: 0;
+  font-weight: 600;
+}
+
+.todayWindText {
+  margin: 0;
+  color: var(--neutral-dark-color);
+}
+
+.todayPrecip {
+  margin: 0.3rem 0 0 0;
+  color: var(--neutral-dark-color);
+}
+
+.todayIconWrapper img {
+  display: block;
+  width: 80px;
+  height: 80px;
+}
+
+.todayTempWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+}
+
+.todayTemp {
+  margin: 0;
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.todayFeels {
+  margin: 0;
+  color: var(--neutral-dark-color);
+}
+
+.todayCondition {
+  margin: 0;
+}
+
+/* Today Forecast */
+.restOfDayWrapper {
+  display: flex;
+  flex-direction: column;
+  min-width: 260px;
+  border-left: 1px solid var(--neutral-dark-color);
+  margin-left: 2rem;
+  padding-left: 2rem;
+}
+
+.restOfDayWrapper h5 {
+  margin: 0 0 0.75rem 0;
+}
+
+.restOfDayList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.restOfDayItem {
+  display: grid;
+  grid-template-columns: 60px 40px 40px 70px 70px;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.restOfDayItem img {
+  width: 32px;
+  height: 32px;
+}
+
+@media (max-width: 768px) {
+  .todayWeatherWrapper {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .restOfDayWrapper {
+    border-left: none;
+    margin-left: 0;
+    padding-left: 0;
+    border-top: 1px solid var(--neutral-dark-color);
+    padding-top: 1rem;
+  }
+}

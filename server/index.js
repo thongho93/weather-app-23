@@ -31,8 +31,16 @@ app.get("/api/weather", async (req, res) => {
       return res.status(400).json({ error: "Missing city or coordinates" });
     }
 
-    const url = `${BASE_URL}/current.json?key=${apiKey}&q=${encodeURIComponent(q)}&lang=no`;
+    const days = req.query.days || 1; // valgfritt: gjør antall dager konfigurerbart
 
+    const url =
+      `${BASE_URL}/forecast.json` +
+      `?key=${apiKey}` +
+      `&q=${encodeURIComponent(q)}` +
+      `&days=${days}` +
+      `&aqi=no` + // eller yes hvis du vil ha air quality
+      `&alerts=no` + // eller yes hvis du vil ha værvarsler
+      `&lang=no`;
     const response = await axios.get(url);
 
     // sender kun værdata tilbake til frontend, ikke nøkkelen
